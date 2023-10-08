@@ -35,7 +35,7 @@ WITH tab AS (
               p.name AS product_name,
               CAST (count(p.name) OVER (PARTITION BY p.name ) AS DOUBLE PRECISION) 	AS total_product,
               (SELECT count(r.id) FROM request r) AS total_requests,
-              ((CAST (count(r.id) OVER (PARTITION BY p.name ) AS DOUBLE PRECISION)/(SELECT count(r.id) FROM request r) )*100.0)::numeric(5,2) AS percentage
+              ((CAST (count(r.id) OVER (PARTITION BY p.name ) AS DOUBLE PRECISION)/(SELECT count(r.id) FROM request r) )*100.0) AS percentage
     FROM product p LEFT JOIN request_item ri ON p.id = ri.product_id
                    LEFT JOIN request r ON	ri.request_id = r.id
                    LEFT JOIN customer c ON	c.id  = r.customer
@@ -43,7 +43,7 @@ WITH tab AS (
 )
 SELECT 	city AS "Город",
           product_name AS "Продукт",
-          percentage AS "Процентная доля заказа"
+          ROUND(percentage,2) AS "Процентная доля заказа"
 FROM tab
 GROUP BY city, product_name,percentage
 ORDER BY 1;
@@ -77,7 +77,7 @@ WITH tab AS (SELECT p.id AS product_id,
                     CASE
                         WHEN count(ri.id) OVER (PARTITION BY r.id) = 0
                             THEN 0
-                        ELSE (count(ri.id) OVER (PARTITION BY r.id, p.name)*100.0 / count(ri.id) OVER (PARTITION BY r.id))::NUMERIC (5,2)
+                        ELSE (count(ri.id) OVER (PARTITION BY r.id, p.name)*100.0 / count(ri.id) OVER (PARTITION BY r.id))
                     END AS percent
     FROM product p LEFT JOIN request_item ri ON p.id = ri.product_id
                     LEFT JOIN request r ON r.id = ri.request_id
@@ -90,7 +90,7 @@ WITH tab AS (SELECT p.id AS product_id,
          GROUP BY requset_id, product_name, percent
      )
 SELECT 	product_name AS "Продукт",
-        AVG(percent) AS "Процентная доля"
+        ROUND(AVG(percent),2) AS "Процентная доля"
 FROM percent_prod
 GROUP BY product_name;
 
