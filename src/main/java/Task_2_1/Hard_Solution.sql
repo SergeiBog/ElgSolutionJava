@@ -43,7 +43,7 @@ WITH tab AS (
 )
 SELECT 	city AS "Город",
           product_name AS "Продукт",
-          ROUND(percentage,2) AS "Процентная доля заказа"
+          ROUND(percentage::NUMERIC,2) AS "Процентная доля заказа"
 FROM tab
 GROUP BY city, product_name,percentage
 ORDER BY 1;
@@ -90,7 +90,7 @@ WITH tab AS (SELECT p.id AS product_id,
          GROUP BY requset_id, product_name, percent
      )
 SELECT 	product_name AS "Продукт",
-        ROUND(AVG(percent),2) AS "Процентная доля"
+        ROUND(AVG(percent)::NUMERIC,2) AS "Процентная доля"
 FROM percent_prod
 GROUP BY product_name;
 
