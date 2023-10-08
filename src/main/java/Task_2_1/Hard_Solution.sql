@@ -49,22 +49,25 @@ GROUP BY city, product_name,percentage
 ORDER BY 1;
 
 --result
---Grozniy,salt,6.67
---Kazan,rice,13.33
---Leningrad,honey,13.33
---Moscow,meat,13.33
---Moscow,bread,13.33
---Sochi,rice,13.33
---Sochi,chicken,13.33
---Sochi,paste,13.33
---Velikiy Novgorod,secret,6.67
---Volgograd,chicken,13.33
---Volgograd,honey,13.33
---Volgograd,meat,13.33
---Volgograd,melon,6.67
---Volgograd,paste,13.33
---,butter,0.00
---,tomatoes,0.00
+--Grozniy	salt	6.25
+--Kazan	rice	12.5
+--Leningrad	bread	25
+--Leningrad	honey	12.5
+--Moscow	meat	12.5
+--Moscow	bread	25
+--Sochi	paste	12.5
+--Sochi	chicken	12.5
+--Sochi	rice	12.5
+--Velikiy Novgorod	secret	6.25
+--Volgograd	bread	25
+--Volgograd	paste	12.5
+--Volgograd	honey	12.5
+--Volgograd	melon	6.25
+--Volgograd	chicken	12.5
+-- Volgograd	meat	12.5
+-- 	butter	0
+-- 	tomatoes	0
+
 
 --#################################################################################################
 --3 Вывести  процентную долю заказов Каждого товара по заявке в среднем
@@ -95,11 +98,15 @@ FROM percent_prod
 GROUP BY product_name;
 
 --result
---tomatoes,0
---honey,100
---chicken,100
---melon,100
---rice,100
---paste,100
---butter,0
---salt,100
+-- secret	100
+-- meat	100
+-- bread	87.5
+-- tomatoes	0
+-- honey	75
+-- chicken	100
+-- melon	100
+-- rice	100
+-- paste	100
+-- butter	0
+-- salt	100
+
