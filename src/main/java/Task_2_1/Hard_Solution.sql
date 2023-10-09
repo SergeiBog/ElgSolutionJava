@@ -3,8 +3,8 @@
 --Отфильтровать и вывести те Записи, по которым в заявках в общей сложности  заказ  больше 5000
 
 SELECT 	c.id AS "id",
-          c.name AS "Имя",
-          'Заказчик' AS "Тип"
+        c.name AS "Имя",
+        'Заказчик' AS "Тип"
 FROM customer c LEFT JOIN  request r ON	c.id  = r.customer
                 LEFT JOIN  request_item ri ON r.id  = ri.request_id
                 LEFT JOIN  product p 		ON	p.id  = ri.product_id
@@ -12,8 +12,8 @@ GROUP BY c.id, c.name, r.id
 HAVING sum(p.COST * ri.volume) > 5000.0
 UNION ALL
 SELECT 	s.id AS "id",
-          s.name AS "Имя",
-          'Поставщик' AS "Тип"
+        s.name AS "Имя",
+        'Поставщик' AS "Тип"
 FROM supplier s LEFT JOIN  request r ON	s.id  = r.supplier
                 LEFT JOIN  request_item ri ON r.id  = ri.request_id
                 LEFT JOIN  product p ON	p.id  = ri.product_id
@@ -30,12 +30,12 @@ HAVING sum(p.COST * ri.volume) > 5000.0;
 
 WITH tab AS (
     SELECT 	r.id AS request_id,
-              c.name AS customer_name,
-              c.city AS city,
-              p.name AS product_name,
-              CAST (count(p.name) OVER (PARTITION BY p.name ) AS DOUBLE PRECISION) 	AS total_product,
-              (SELECT count(r.id) FROM request r) AS total_requests,
-              ((CAST (count(r.id) OVER (PARTITION BY p.name ) AS DOUBLE PRECISION)/(SELECT count(r.id) FROM request r) )*100.0) AS percentage
+            c.name AS customer_name,
+            c.city AS city,
+            p.name AS product_name,
+            count(p.name) OVER (PARTITION BY p.name )  	AS total_product,
+            (SELECT count(r.id) FROM request r) AS total_requests,
+            (count(r.id) OVER (PARTITION BY p.name ) )*100.0/(SELECT count(r.id) FROM request r) AS percentage
     FROM product p LEFT JOIN request_item ri ON p.id = ri.product_id
                    LEFT JOIN request r ON	ri.request_id = r.id
                    LEFT JOIN customer c ON	c.id  = r.customer

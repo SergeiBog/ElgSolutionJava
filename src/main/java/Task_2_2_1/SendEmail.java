@@ -15,16 +15,11 @@ public class SendEmail {
     private static final String EMAIL_FROM = "fromEmail@mail.ru";
     private static final String PASSWORD = "qwerty123";
     private static final String EMAIL_TO = "toEmail@mail.com";
+    private static final String HOST = "localhost";
 
     public void sendEmail(String filePath, String fileName){
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", "smtp.mail.ru");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtps.ssl.checkserveridentity", true);
-        properties.put("mail.smtps.ssl.trust", "*");
-        properties.put("mail.smtp.ssl.enable", "true");
+        Properties properties = System.getProperties();
+        properties.setProperty("mail.smtp.host",HOST);
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
@@ -35,8 +30,8 @@ public class SendEmail {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL_FROM));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(EMAIL_TO));
-            message.setSubject("Subject email");
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(EMAIL_TO));
+            message.setSubject("Mail theme");
 
             DataSource dataSource = new FileDataSource(new File(filePath + fileName));
             DataHandler dataHandler = new DataHandler(dataSource);
